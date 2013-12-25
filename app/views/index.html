@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Power Plot</title>
+
+    <!-- build:css({.tmp,app}) /styles/styles.css -->
+    <link rel="stylesheet" href="/styles/main.css">
+    <!-- endbuild -->
+  </head>
+
+  <body ng-app="powerPlotApp">
+    <div class="container" ng-controller="PowerPlotCtrl">
+      <div class="alert alert-danger" ng-show="error">
+        <details>
+          <summary>{{error.message}}</summary>
+          <p>{{error.details}}</p>
+        </details>
+      </div>
+
+      <div class="graph" ng-hide="plotData.length == 0">
+      </div>
+
+      <button type="button" class="btn btn-default" ng-click="discardPlotData()" ng-hide="plotData.length == 0">Clear</button>
+
+      <div class="progress" ng-class="{ invisible: !uploading }">
+        <div class="progress-bar" style="width: {{uploadPercentComplete}}%;"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <form id="file-upload" ng-submit="uploadFile()">
+            <div class="form-group row">
+              <div class="col-md-9">
+                <label for="file" class="btn btn-default">{{files | filename}}</label>
+                <input type="file" id="file" class="form-control invisible" file-change="setFiles">
+              </div>
+
+              <div class="col-md-3">
+                <input type="submit" class="btn btn-primary" value="Upload" ng-class="{ disabled: !files }">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row" ng-show="data">
+        <div class="col-md-6">
+          <form ng-submit="addData()">
+            <div class="form-group row">
+              <div class="col-md-4">
+                <label for="session">Session</label>
+                <select class="form-control" ng-model="session" ng-options="session.index for session in data"></select>
+              </div>
+
+              <div class="col-md-4 col-md-offset-1">
+                <label for="lap">Lap</label>
+                <select class="form-control" ng-model="lap" ng-options="lap.index for lap in session.laps"></select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-9">
+                <label for="label">Label</label>
+                <input type="text" class="form-control" ng-model="label">
+              </div>
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Add">
+            <button type="button" class="btn btn-default" ng-click="discardData()">Done</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- build:js({.tmp,app}) /scripts/scripts.js -->
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/lodash/dist/lodash.js"></script>
+    <script src="/bower_components/d3/d3.js"></script>
+    <script src="/scripts/app.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>
