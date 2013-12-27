@@ -2,6 +2,7 @@
 
 var express = require('express');
 var path = require('path');
+var formidable = require('formidable');
 var app = express();
 var env = app.get('env');
 var port = process.env.PORT || 3000;
@@ -21,7 +22,6 @@ app.configure('development', function () {
 app.configure(function () {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
-  app.use(express.multipart());
   app.use(app.router);
 });
 
@@ -33,20 +33,28 @@ app.get('/*', function (request, response, next) {
   }
 });
 
-app.post('/upload', function (request, response) {
-  if (!request.files) {
-    return response.send(400, 'Bad Request');
-  }
+app.post('/upload', function (request, response, next) {
+  var form = new formidable.IncomingForm();
 
-  var file = request.files.file.path;
+  form.parse(request, function (error, fields, files) {
+    if (error) {
+      return next(error);
+    }
 
-  parser.parse(file)
-    .then(function (contents) {
-      response.send(200, contents);
-    })
-    .otherwise(function (error) {
-      response.send(500, error);
-    });
+    if (!files) {
+      return response.send(400, 'Bad Request');
+    }
+
+    var file = files.file.path;
+
+    parser.parse(file)
+      .then(function (contents) {
+        response.send(200, contents);
+      })
+      .otherwise(function (error) {
+        response.send(500, error);
+      });
+  });
 });
 
 module.exports = app;
