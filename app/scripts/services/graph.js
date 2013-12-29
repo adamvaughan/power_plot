@@ -137,20 +137,14 @@
       });
     };
 
-    var drawPowerLabels = function (data, transition, style) {
-      if (style) {
-        style = style + '-';
-      } else {
-        style = '';
-      }
-
-      var labels = svg.selectAll('.' + style + 'label.power')
+    var drawPowerLabels = function (data, transition) {
+      var labels = svg.selectAll('.label.power')
         .data(data);
       var enter = labels.enter();
       var exit = labels.exit();
 
       enter.append('text')
-        .attr('class', style + 'label power')
+        .attr('class', 'label power')
         .attr('x', 3)
         .attr('dy', '.35em')
         .style('fill', function (ride) {
@@ -162,7 +156,7 @@
 
       exit.remove();
 
-      transition.selectAll('.' + style + 'label.power').attr('transform', function (ride) {
+      transition.selectAll('.label.power').attr('transform', function (ride) {
         var lastRecord = _.last(ride.records);
         return 'translate(' + x(lastRecord.elapsedTime) + ',' + y(lastRecord.power) + ')';
       });
@@ -226,7 +220,6 @@
         drawYAxis(transition);
 
         drawPowerLines(data, transition);
-        drawPowerLabels(data, transition, 'outline');
         drawPowerLabels(data, transition);
         drawFtpLines(data, xMax, transition);
         drawFtpLabels(data, xMax, transition);
