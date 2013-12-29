@@ -51,9 +51,10 @@ app.post('/upload', function (request, response, next) {
       .then(function (contents) {
         response.send(200, contents);
       })
-      .otherwise(function (error) {
+      .catch(function (error) {
         response.send(500, error);
-      });
+      })
+      .done();
   });
 });
 
