@@ -10,19 +10,19 @@
 
   <body ng-app="powerPlotApp">
     <div class="container" ng-controller="PowerPlotCtrl">
-      <div class="alert alert-danger" ng-show="error">
+      <div class="alert alert-danger" ng-show="error" ng-cloak>
         <details>
           <summary>{{error.message}}</summary>
           <p>{{error.details}}</p>
         </details>
       </div>
 
-      <div class="graph" ng-hide="plotData.length == 0">
+      <div class="graph" ng-hide="plotData.length == 0" ng-cloak>
       </div>
 
-      <button type="button" class="btn btn-default" ng-click="discardPlotData()" ng-hide="plotData.length == 0">Clear</button>
+      <button type="button" class="btn btn-default" ng-click="discardPlotData()" ng-hide="plotData.length == 0" ng-cloak>Clear</button>
 
-      <div class="progress" ng-class="{ invisible: !uploading }">
+      <div class="progress" ng-class="{ invisible: !uploading }" ng-cloak>
         <div class="progress-bar" style="width: {{uploadPercentComplete}}%;"></div>
       </div>
 
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="row" ng-show="data">
+      <div class="row" ng-show="data" ng-cloak>
         <div class="col-md-6">
           <form ng-submit="addData()">
             <div class="form-group row">
