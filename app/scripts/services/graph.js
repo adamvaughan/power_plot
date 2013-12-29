@@ -54,17 +54,15 @@
       .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var xMax;
-
     var calculateXMax = function (data) {
-      xMax = d3.max(data, function (ride) {
+      return d3.max(data, function (ride) {
         return d3.max(ride.records, function (record) {
           return record.elapsedTime;
         });
       });
     };
 
-    var updateXDomain = function () {
+    var updateXDomain = function (xMax) {
       x.domain([0, xMax]);
     };
 
@@ -170,7 +168,7 @@
       });
     };
 
-    var drawFtpLines = function (data, transition) {
+    var drawFtpLines = function (data, xMax, transition) {
       var lines = svg.selectAll('.line.ftp')
         .data(data);
       var enter = lines.enter();
@@ -189,7 +187,7 @@
       });
     };
 
-    var drawFtpLabels = function (data, transition) {
+    var drawFtpLabels = function (data, xMax, transition) {
       var labels = svg.selectAll('.label.ftp')
         .data(data);
       var enter = labels.enter();
@@ -215,10 +213,11 @@
 
     return {
       graph: function (data) {
+        var xMax = calculateXMax(data);
+
         color.domain(_.pluck(data, 'label'));
 
-        calculateXMax(data);
-        updateXDomain();
+        updateXDomain(xMax);
         updateYDomain(data);
 
         var transition = svg.transition().duration(500);
@@ -229,8 +228,8 @@
         drawPowerLines(data, transition);
         drawPowerLabels(data, transition, 'outline');
         drawPowerLabels(data, transition);
-        drawFtpLines(data, transition);
-        drawFtpLabels(data, transition);
+        drawFtpLines(data, xMax, transition);
+        drawFtpLabels(data, xMax, transition);
       }
     };
   });
